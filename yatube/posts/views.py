@@ -1,9 +1,16 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def index(request):
-    return HttpResponse('Main page')
+    context = {
+        'title': 'Это главная страница проекта Yatube',
+    }
+    return render(request, 'posts/index.html', context)
 
 
+# not working
 def group_posts(request, slug):
-    return HttpResponse(f'Group posts page with name: {slug}')
+    context = {
+        'title': 'Здесь будет информация о группах проекта Yatube',
+    }
+    return render(request, 'posts/group_list.html', context)
