@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load user_filters %}
+{% block title %}
+  Пост {{ post.text|truncatewords:CHARS_SHOWN }}
+{% endblock title %}
+{% block content %}
+	<div class="container">
+		<div class="card my-3">
+			<div class="ml-3 mt-2">
+				<a href="{% url 'posts:profile' post.author.username %}" class="over_link">
+					<img 
+						class="img-croped rounded-circle img-hoverd"
+						src="{{ post.author.profile.photo.url }}"
+						alt="Profile photo"
+					/>
+				</a>
+				<a href="{% url 'posts:profile' post.author.username %}">
+					<b>@{{ post.author.username }}</b>
+				</a>·
+				<span class="text-muted">{{ post.pub_date|date:"j M Y G:i" }}</span>
+				{% if post.group %}
+					<p class="my-0">
+						<a href="{% url 'posts:group_list' post.group.slug %}">#{{ post.group.title }}</a>
+					</p>
+				{% endif %}
+			</div>
+			<div class="mx-3 mb-2">
+				<p class="my-2">{{ post.text|linebreaksbr }}</p>
+				{% if post.image %}<img class="img-fluid rounded" src="{{ post.image.url }}" alt="Card image cap"/><br/>{% endif %}
+				{% if post.author.username == user.username %}
+					<a class="btn btn-secondary mt-2"
+						href="{% url 'posts:post_edit' post.id %}"
+						role="button">Редактировать</a>
+						
+					<button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#DeleteModal">
+						Удалить
+					</button>
+					<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-body">
+									<p>Вы уверены, что хотите удалить эту запись?</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+									<a class="btn btn-danger"
+										href="{% url 'posts:post_delete' post.id %}"
+										role="button">Да, удалить</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		<a id="comments"></a>
+		<div class="card my-3">
+			{% include "posts/includes/comment_declination.html" %}
+				<ul class="list-group list-group-flush">
+					{% for comment in comments %}
+						<li class="list-group-item">
+							<a href="{% url 'posts:profile' comment.author.username %}">
+								<b>@{{ comment.author.username }}</b>
+							</a>·
+							<span class="text-muted">{{ comment.created|date:"j M Y G:i" }}</span>
+							<p>{{ comment.text }}</p>
+						</li>
+					{% endfor %}
+				</ul>
+		</div>
+		{% if user.is_authenticated %}
+			<div class="card my-3">
+				<h5 class="card-header">Добавить комментарий:</h5>
+				<div class="card-body">
+					<form method="post" action="{% url 'posts:add_comment' post.id %}">
+						{% csrf_token %}
+						<div class="form-group mb-2">{{ form.text|addclass:"form-control" }}</div>
+						<button type="submit" class="btn btn-primary">Отправить</button>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+{% endblock content %}

@@ -1,0 +1,28 @@
+{% for post in page_obj %}
+  <div class="hover_card my-3">
+    <div class="ml-3 mt-2">
+      <a href="{% url 'posts:profile' post.author.username %}" class="over_link">
+        <img 
+          class="img-croped rounded-circle img-hoverd"
+          src="{{ post.author.profile.photo.url }}"
+          alt="Profile photo"
+        />
+      </a>
+      <a href="{% url 'posts:profile' post.author.username %}" class="over_link">
+        <b>@{{ post.author.username }}</b>
+      </a>·
+      <span class="text-muted">{{ post.pub_date|date:"j M Y G:i" }}</span>
+      {% if post.group %}
+        <p class="my-0">
+          <a href="{% url 'posts:group_list' post.group.slug %}" class="over_link">#{{ post.group.title }}</a>
+        </p>
+      {% endif %}
+    </div> 
+    <div class="mx-3 mb-2">
+      <p class="my-2">{{ post.text|linebreaksbr }}</p>
+      {% if post.image %}<img class="img-fluid rounded" src="{{ post.image.url }}" alt="Card image cap"/><br/>{% endif %}
+      <a href="{% url 'posts:post_detail' post.id %}" class="stretched-link"></a>
+      <a href="{% url 'posts:post_detail' post.id %}#comments" class="over_link">Комментарии {{ post.comments.all|length }}</a>
+    </div>
+  </div>
+{% endfor %}

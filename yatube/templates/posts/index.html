@@ -1,51 +1,8 @@
-{% extends 'base.html' %}
-{% load static %}
-<!DOCTYPE html> <!-- Используется html 5 версии -->
-<html lang="ru"> <!-- Язык сайта - русский -->
-  <head>
-  </head>
-  <body>
-    <header>
-    </header>
-    <main>
-      {% block content %} 
-      <!-- класс py-5 создает отступы сверху и снизу блока -->
-      <div class="container py-5">
-        <h1>Последние обновления на сайте</h1>
-        {% for post in posts %}
-          <article>
-            <ul>
-              <li>
-                Автор: {{ post.author.get_full_name }}
-              </li>
-              <li>
-                Дата публикации: {{ post.pub_date|date:"d E Y" }}
-              </li>
-            </ul>      
-            <p>
-              {{ post.text|safe }}
-            </p>
-            {% if post.group %}
-              <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
-            {% endif %}   
-          </article>
-          {% if not forloop.last %}
-            <hr>
-          {% endif %}
-        {% endfor %}  
-        <!-- под последним постом нет линии -->
-      </div>
-      {% endblock %}   
-    </main>
-    {% block footer%} 
-    <!-- Использованы классы бустрапа: -->
-    <!-- border-top: создаёт тонкую линию сверху блока -->
-    <!-- text-center: выравнивает текстовые блоки внутри блока по центру -->
-    <!-- py-3: контент внутри размещается с отступом сверху и снизу -->         
-    <footer class="border-top text-center py-3">
-      <!-- тег span используется для добавления нужных стилей отдельным участкам текста --> 
-      <p>© 2020 Copyright <span style="color:red">Ya</span>tube</p> 
-      {% endblock %}    
-    </footer>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    {% include "posts/includes/switcher.html" %}
+    {% include "posts/includes/feed.html" %}
+    {% include "posts/includes/paginator.html" %}  
+  </div>
+{% endblock content %}   

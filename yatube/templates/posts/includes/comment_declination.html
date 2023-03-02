@@ -1,0 +1,7 @@
+{% if num_comments == 1 %}
+	<h5 class="card-header">{{ num_comments }} комментарий</h5>
+{% elif 1 < num_comments and num_comments < 5 %}
+	<h5 class="card-header">{{ num_comments }} комментария</h5>
+{% else %}
+	<h5 class="card-header">{{ num_comments }} комментариев</h5>
+{% endif %}

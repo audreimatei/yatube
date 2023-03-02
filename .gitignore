@@ -128,5 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#IDE
+# IDE
 .vscode/
+*.code-workspace
+.history/
+
+# static and media
+static/
+media/

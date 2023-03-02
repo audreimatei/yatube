@@ -1,48 +1,36 @@
-{% extends 'base.html' %}
-{% load static %}
-<!DOCTYPE html> <!-- Используется html 5 версии -->
-<html lang="ru"> <!-- Язык сайта - русский -->
-  <head>   
-  </head>
-  <body>
-    <header>
-    </header>
-    <main>
-      {% block content %}
-      <!-- класс py-5 создает отступы сверху и снизу блока -->
-      <div class="container py-5">
-        <h1>{{ group.title }}</h1>
-        <p>
-          {{ group.description }}
-        </p>
-        {% for post in posts %}
-          <article>
-            <ul>
-              <li>
-                Автор: {{ post.author.get_full_name }}
-              </li>
-              <li>
-                Дата публикации: {{ post.pub_date|date:"d E Y" }}
-              </li>
-            </ul>      
-            <p>
-              {{ post.text|safe }}
-            </p>        
-          </article>
-          {% if not forloop.last %}
-            <hr>
-          {% endif %}
-        {% endfor %} 
-        <!-- под последним постом нет линии -->
-      </div>  
-      {% endblock %}
-    </main>
-    {% block footer%} 
-    <footer class="page-footer font-small blue border-top">
-      <div class="footer-copyright text-center py-3">© 2020 Copyright 
-        <p><span style="color:red">Ya</span>tube</p> 
-      </div>
-      {% endblock %}    
-    </footer>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %}
+  {{ group.title }}
+{% endblock title %}
+{% block content %}
+  <div class="container">
+    <h1>{{ group.title }}</h1>
+    <p class="mb-0">{{ group.description|linebreaksbr }}</p>
+    {% if user.is_authenticated and user == group.creator %}
+      <a class="btn btn-secondary mt-2"
+        href="{% url 'posts:group_edit' group.slug %}"
+        role="button">Редактировать группу</a>
+       
+        <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#DeleteModal">
+          Удалить группу
+        </button>
+        <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-body">
+                <p>Вы уверены, что хотите удалить группу {{ group.title }}?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет</button>
+                <a class="btn btn-danger"
+                  href="{% url 'posts:group_delete' group.slug %}"
+                  role="button">Да, удалить</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    {% include "posts/includes/feed.html" %}
+    {% include "posts/includes/paginator.html" %}
+  </div>
+{% endblock content %}

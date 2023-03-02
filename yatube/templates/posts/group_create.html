@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}
+  {% if form.instance.pk %}
+    Редактировать группу
+  {% else %}
+    Добавить группу
+  {% endif %}  
+{% endblock title %}
+{% block content %}
+{% load user_filters %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 my-3">
+        <div class="card">
+          <div class="card-header">       
+            {% if form.instance.pk %}
+            Редактировать группу
+            {% else %}
+            Добавить группу
+            {% endif %}
+          </div>
+          <div class="card-body">
+            {% if form.errors %}
+              {% for field in form %}
+                {% for error in field.errors %}            
+                  <div class="alert alert-danger">
+                    {{ error|escape }}
+                  </div>
+                {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+            {% if form.instance.pk %}        
+              <form
+                method="post"
+                action="{% url 'posts:group_edit' slug %}">
+              {% else %}
+              <form
+                method="post"
+                action="{% url 'posts:group_create' %}">
+            {% endif %}        
+                {% csrf_token %}
+                {% for field in form %}          
+                  <div class="form-group row my-3 p-3"
+                    {% if field.field.required %} 
+                      aria-required="true"
+                    {% else %}
+                      aria-required="false"
+                    {% endif %}
+                  >
+                    <label for="{{ field.id_for_label }}">
+                      {{ field.label }}
+                        {% if field.field.required %}
+                          <span class="required text-danger">*</span>
+                        {% endif %}
+                    </label>
+                    {{ field|addclass:'form-control' }}
+                    {% if field.help_text %}
+                      <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                        {{ field.help_text|safe }}
+                      </small>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+                <div class="d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">
+                    {% if form.instance.pk %}
+                    Сохранить
+                    {% else %}
+                    Добавить
+                    {% endif %}
+                  </button>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

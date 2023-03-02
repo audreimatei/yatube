@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}
+  {{ author_full_name }}
+{% endblock title %}
+{% block content %}
+  <div class="container">
+    <div class="mb-3">
+      <div class="card-no-border">
+        <div class="row align-items-center no-gutters">
+          <div class="col-3 mr-3 my-3">
+            <img 
+              class="img-fluid rounded-circle"
+              src="{{ author.profile.photo.url }}"
+              alt="Profile photo"
+            />
+          </div>
+          <div class="col-7">
+            <ul class="list-group list-group-flush n">
+              <li class="list-group-item"><b>{{ posts_num }}</b>
+                {% include "posts/includes/post_declination.html" %}
+              </li>
+              <li class="list-group-item"><b>{{ followers_num }}</b>
+                {% include "posts/includes/follower_declination.html" %}
+              </li>
+              <li class="list-group-item"><b>{{ following_num }}</b>
+                {% include "posts/includes/following_declination.html" %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <h5 class="my-0"><b>{{ author.get_full_name }}</b></h5>
+      <p class="text-muted mb-0">@{{ author.username }}</p>
+      <p class="mb-0">{{ author.profile.bio }}</p>
+      {% if user.is_authenticated %}
+        {% if user == author %}
+          <a class="btn btn-secondary mt-2"
+            href="{% url 'posts:profile_edit' author.username %}"
+            role="button">Редактировать профиль</a>
+        {% else %}
+          {% if following %}
+            <a class="btn btn-light mt-2"
+              href="{% url 'posts:profile_unfollow' author.username %}"
+              role="button">Отписаться</a>
+          {% else %}
+            <a class="btn btn-primary mt-2"
+              href="{% url 'posts:profile_follow' author.username %}"
+              role="button">Подписаться</a>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </div>
+    {% include "posts/includes/feed.html" %}
+    {% include "posts/includes/paginator.html" %}
+  </div>
+{% endblock content %}
