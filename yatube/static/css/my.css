@@ -1,0 +1,50 @@
+.hover_card{
+    position:relative;
+    display:-ms-flexbox;
+    display:flex;
+    -ms-flex-direction:column;
+    flex-direction:column;
+    min-width:0;
+    word-wrap:break-word;
+    background-color:#fff;
+    background-clip:border-box;
+    border:1px solid rgba(0,0,0,.125);
+    border-radius:.25rem
+}
+
+.hover_card:hover{
+    background-color:#f8f9fa;
+}
+
+.card-no-border{
+    position:relative;
+    display:-ms-flexbox;
+    display:flex;
+    -ms-flex-direction:column;
+    flex-direction:column;
+    min-width:0;
+    word-wrap:break-word;
+    background-color:#fff;
+    background-clip:border-box;
+    border-radius:.25rem
+}
+
+.over_link {
+    z-index: 2;
+    position: relative;
+ }
+
+a:hover {
+    text-decoration: none;
+}
+
+.img-croped {
+    width: 50px; 
+    height: 50px; 
+    object-fit: cover;
+    object-position: 25% 25%; 
+ }
+
+.img-hoverd:hover {
+    box-shadow: 0 0 5px rgb(0 0 0 / 0.5);
+}
